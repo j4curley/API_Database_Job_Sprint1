@@ -1,67 +1,87 @@
 # James Curley
-#COMP 490 Sprint 1
+# Sprint 2
 
+import sqlite3
 from urllib.request import urlopen
 import json
+import time
+import datetime
 
-job_list = []       # empty job list that we will fill up later
-file = open("jobs.txt", "w+")
+# Opens the 5 pages of github jobs
+json_1 = urlopen("https://jobs.github.com/positions.json")
+json_2 = urlopen('https://jobs.github.com/positions.json?page=2')
+json_3 = urlopen('https://jobs.github.com/positions.json?page=3')
+json_4 = urlopen('https://jobs.github.com/positions.json?page=4')
+json_5 = urlopen('https://jobs.github.com/positions.json?page=5')
+# loads GitHub Jobs API positions and loads the json object into a variable
+jobs_page1 = json.load(json_1)
+jobs_page2 = json.load(json_2)
+jobs_page3 = json.load(json_3)
+jobs_page4 = json.load(json_4)
+jobs_page5 = json.load(json_5)
+#Empty list that we will populate with api data
+job_list = []
+location_list = []
+company_list = []
+date_list = []
 
-##############################
-# Creating json object vars  #
-##############################
-json_object1 = urlopen("https://jobs.github.com/positions.json")
-json_object2 = urlopen('https://jobs.github.com/positions.json?page=2')
-json_object3 = urlopen('https://jobs.github.com/positions.json?page=3')
-json_object4 = urlopen('https://jobs.github.com/positions.json?page=4')
-json_object5 = urlopen('https://jobs.github.com/positions.json?page=5')
+file= open("jobs.txt","w+")
 
-##############################
-#   Loading in json object   #
-###############################
-pageOneData = json.load(json_object1)
-pageTwoData = json.load(json_object2)
-pageThreeData = json.load(json_object3)
-pageFourData = json.load(json_object4)
-pageFiveData = json.load(json_object5)
+connection = sqlite3.connect('jobs.db')
+c = connection.cursor()
 
-def api_jobs(): #this function loops through api
-
-    for item in pageOneData:
-        #print(item['title'])
+def APIDataGrab():
+    time.sleep(2)
+    for item in jobs_page1:    #loops through page one and writes the data to empty lists
         job_list.append(item["title"])
-        file.write(item["title"] + "\n")
-    for item in pageTwoData:
-        #print(item['title'])
+        company_list.append(item["company"])
+        location_list.append(item["location"])
+        date_list.append(item["created_at"])
+        file.write("Job Title: " + item["title"] +  " Company: " + item["company"] + " Location: " + item["location"] + " Created at: " + item["created_at"] + "\n")
+    for item in jobs_page2:
         job_list.append(item["title"])
-        file.write(item["title"] + "\n")
-
-    for item in pageThreeData:
-        #print(item['title'])
+        company_list.append(item["company"])
+        location_list.append(item["location"])
+        date_list.append(item["created_at"])
+        file.write("Job Title: " + item["title"] +  " Company: " + item["company"] + " Location: " + item["location"] + " Created at: " + item["created_at"] + "\n")
+    for item in jobs_page3:
         job_list.append(item["title"])
-        file.write(item["title"] + "\n")
-
-    for item in pageFourData:
-        #print(item['title'])
+        company_list.append(item["company"])
+        location_list.append(item["location"])
+        date_list.append(item["created_at"])
+        file.write("Job Title: " + item["title"] +  " Company: " + item["company"] + " Location: " + item["location"] + " Created at: " + item["created_at"] + "\n")
+    for item in jobs_page4:
         job_list.append(item["title"])
-        file.write(item["title"] + "\n")
-
-    for item in pageFiveData:
-        #print(item['title'])
+        company_list.append(item["company"])
+        location_list.append(item["location"])
+        date_list.append(item["created_at"])
+        file.write("Job Title: " + item["title"] +  " Company: " + item["company"] + " Location: " + item["location"] + " Created at: " + item["created_at"] + "\n")
+    for item in jobs_page5:
         job_list.append(item["title"])
-        file.write(item["title"] + "\n")
+        company_list.append(item["company"])
+        location_list.append(item["location"])
+        date_list.append(item["created_at"])
+        file.write("Job Title: " + item["title"] +  " Company: " + item["company"] + " Location: " + item["location"] + " Created at: " + item["created_at"] + "\n")
 
-def printJobs():
+def data():
     print(job_list)
+    print(company_list)
+    print(location_list)
+    print(date_list)
 
-api_jobs()
-printJobs()
+def create_table():
+    c.execute('CREATE TABLE IF NOT EXISTS githubJobs(title TEXT, company TEXT, location TEXT, date TEXT)')
+
+def data_entry():
+    for i in range(len(job_list)):
+        c.execute("INSERT INTO githubJobs (title, company, location, date) VALUES (?, ?, ?, ?)",
+                  (job_list[i], company_list[i], location_list[i] , date_list[i]))
+        connection.commit()
+
+APIDataGrab()
+data()
+create_table()
+data_entry()
+c.close()
+connection.close()
 file.close()
-##
-
-
-
-
-
-
-
