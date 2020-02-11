@@ -1,3 +1,9 @@
 # James Curley
-This Sprint one project pulls the data from the github jobs api and loads it into json object variables. Then I looped through the data and added it to a list and then wrote it to a file I made a couple of testing functions. One that checks to see if there are at least 100 items in the list. And the other function checks to see if there is a certain job title in the list.
 
+Desription:
+This Sprint two creates a database based on the github jobs api that I pulled data from. There are different subheadings for the table such as
+job title, location, date posted and company name. I looped through the data and placed the data into a database.
+I also did automated testing. I checked to see if a certain name or location is in the database and so on.
+
+Instructions:
+Run productionCode.py and a database file should be created.
