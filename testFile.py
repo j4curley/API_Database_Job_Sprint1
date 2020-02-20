@@ -3,7 +3,7 @@ from JamesCurleySprint1 import productionCode
 import pytest
 import sqlite3
 
-test_conn = sqlite3.connect('jobData.db')
+test_conn = sqlite3.connect('StackOverFlowJobs.db')
 test_cursor = test_conn.cursor()
 
 @pytest.fixture
@@ -38,7 +38,7 @@ def test_save_data():
     demo_data = {'id': 1342, 'type': "Testable"}
     list_data = []
     list_data.append(demo_data)
-    file_name = "test.txt"
+    file_name = "testStackOverFlow.txt"
     productionCode.save_data(list_data, file_name)
     testfile = open(file_name, 'r')
     saved_data = testfile.readlines()
